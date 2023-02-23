@@ -1,10 +1,7 @@
 from starlette.middleware.cors import CORSMiddleware  # 追加
 from fastapi import FastAPI
-import requests
-import os
-from dotenv import load_dotenv
-load_dotenv()
-TOKEN = os.environ["SLACK_TOKEN"]
+from slackapi import getChannelList, getMemberList, getMessages, getReplies, getUserList, getMembers
+
 
 app = FastAPI()
 
@@ -17,20 +14,40 @@ app.add_middleware(
 )
 
 
-def getAPI(url, params):
-    headers = {"Authorization": "Bearer "+TOKEN}
-    return requests.get(url, headers=headers, params=params)
-
-
 @app.get("/")
 async def index():
-    return {"message": "Hello World!!"} 
+    return {"message": "Hello World!!"}
 
 
 @app.get("/channel")
 async def index():
-    url = "https://slack.com/api/conversations.list"
-    params = {}
-    r = getAPI(url, params)
-    result = r.json()["channels"]
-    return {"message": result}
+    channels = getChannelList()
+    return {
+        "channels": channels
+    }
+
+
+@app.get("/users")
+async def index():
+    users = getUserList()
+    return {
+        "users": users
+    }
+
+
+@app.get("/channel/{channelID}")
+async def index(channelID: str):
+    messages = getMessages(channelID)
+    members = getMembers(channelID)
+    return {
+        "messages": messages,
+        "members": members
+    }
+
+
+@ app.get("/channel/{channelID}/{ts}")
+async def index(channelID: str, ts: str):
+    replies = getReplies(channelID, ts)
+    return {
+        "replies": replies,
+    }
