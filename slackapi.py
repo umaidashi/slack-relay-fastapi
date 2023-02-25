@@ -2,12 +2,22 @@ import requests
 import os
 from dotenv import load_dotenv
 load_dotenv()
-TOKEN = os.environ["SLACK_TOKEN"]
+USER_TOKEN = os.environ["USER_TOKEN"]
+BOT_TOKEN = os.environ["BOT_TOKEN"]
 
 
 def getAPI(url, params):
-    headers = {"Authorization": "Bearer "+TOKEN}
+    headers = {"Authorization": "Bearer "+USER_TOKEN}
     return requests.get(url, headers=headers, params=params)
+
+
+def getTeamInfo():
+    url = "https://slack.com/api/team.info"
+    params = {}
+    headers = {"Authorization": "Bearer "+BOT_TOKEN}
+    r = requests.get(url, headers=headers, params=params)
+    result = r.json()["team"]
+    return result
 
 
 def getChannelList():

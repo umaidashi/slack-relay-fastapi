@@ -1,7 +1,7 @@
 from starlette.middleware.cors import CORSMiddleware  # 追加
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from slackapi import getChannelList, getMemberList, getMessages, getReplies, getUserList, getMembers
+from slackapi import getChannelList, getMemberList, getMessages, getReplies, getUserList, getMembers, getTeamInfo
 
 
 app = FastAPI(default_response_class=JSONResponse)
@@ -18,6 +18,14 @@ app.add_middleware(
 @app.get("/")
 async def index():
     return {"message": "Hello World!!"}
+
+
+@app.get("/team")
+async def index():
+    team = getTeamInfo()
+    return {
+        "team": team
+    }
 
 
 @app.get("/channel")
