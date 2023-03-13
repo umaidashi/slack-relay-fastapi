@@ -1,7 +1,7 @@
 from starlette.middleware.cors import CORSMiddleware  # 追加
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from slackapi import getChannelList, getMemberList, getMessages, getReplies, getUserList, getMembers, getTeamInfo
+from slackapi import getChannelList, getMemberList, getMessages, getReplies, getUserList, getMembers, getTeamInfo, getEmoji
 
 
 app = FastAPI(default_response_class=JSONResponse)
@@ -41,6 +41,14 @@ async def index():
     users = getUserList()
     return {
         "users": users
+    }
+
+
+@app.get("/emoji")
+async def index():
+    emoji = getEmoji()
+    return {
+        "emoji": emoji
     }
 
 

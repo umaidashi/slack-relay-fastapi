@@ -89,3 +89,11 @@ def getUserList():
     r = getAPI(url, params)
     result = r.json()["members"]
     return result
+
+
+def getEmoji():
+    url = "https://slack.com/api/emoji.list"
+    params = {}
+    r = getAPI(url, params)
+    result = r.json()["emoji"]
+    return result
